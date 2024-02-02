@@ -16,6 +16,10 @@ const Grid: React.FC = () => {
         setGrid(copy);
     });
 
+    eventBus.register('clearButtonClicked', () => {
+        setGrid(Array.from({length: n},()=> Array.from({length: n}, () => 0)));
+    })
+
     const solve = (copy: number[][]): boolean => {
         const emptyCell = findEmptyCell();
         const [row, col] = emptyCell;
@@ -92,7 +96,7 @@ const Grid: React.FC = () => {
             {
                 grid.map((row, indexRow) => {
                     return(
-                        <div key={`Row-${indexRow}`}>
+                        <div key={`Row-${indexRow}`} className='row'>
                             {
                                 row.map((value, indexCol) => {
                                     return(

@@ -9,6 +9,10 @@ function App() {
     eventBus.dispatch('solveButtonClicked');
   }
 
+  const handleOnClear = () => {
+    eventBus.dispatch('clearButtonClicked');
+  }
+
   // const values = [
   //   [0,0,0,0,0,0,2,0,0],
   //   [0,8,0,0,0,7,0,9,0],
@@ -25,6 +29,7 @@ function App() {
     <div className="App">
       <GridComponent />
       <button onClick={handleOnClick}>Solve</button>
+      <button onClick={handleOnClear}>Clear</button>
     </div>
   );
 }

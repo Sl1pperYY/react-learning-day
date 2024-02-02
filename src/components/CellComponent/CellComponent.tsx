@@ -14,7 +14,8 @@ const Cell: React.FC<CellProps> = ({ value, valueChanged, row, column }) => {
     }
 
     return(
-        <input 
+        <input
+            className='cell'
             value={ value === 0 ? "" : value }
             onChange={handleChange}
         />
