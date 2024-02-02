@@ -1,23 +1,30 @@
 import CellComponent from '../CellComponent/CellComponent';
-
+import React, { useState } from 'react';
 import './GridComponent.css';
 
-type GridProps = {
-    values: number[][]
-}
 
-const Grid: React.FC<GridProps> = ({ values }) => {
+const Grid: React.FC = () => {
+    const n = 9;
+    const [grid, setGrid] = useState(Array.from({length: n},()=> Array.from({length: n}, () => 0)));
+
+    const valueChanged = (row: number, column: number, newValue: number) => {
+        let copy = [...grid];
+        copy[row][column] = newValue;
+        setGrid(copy);
+
+        console.log(grid);
+    }
 
     return(
         <>
             {
-                values.map(row => {
+                grid.map((row, indexRow) => {
                     return(
-                        <div>
+                        <div key={`Row-${indexRow}`}>
                             {
-                                row.map(value => {
+                                row.map((value, indexCol) => {
                                     return(
-                                        <CellComponent value={value}/>
+                                        <CellComponent key={`Cell-${indexRow}-${indexCol}`} value={value} row={indexRow} column={indexCol} valueChanged={valueChanged}/>
                                     )
                                 })
                             }
