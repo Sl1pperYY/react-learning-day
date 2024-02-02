@@ -3,34 +3,27 @@ import React, { useState } from 'react';
 import './GridComponent.css';
 import { EventBus } from '../../lowlevel/EventBus';
 
+type Props = {
+    values: number[][]
+}
 
-const Grid: React.FC = () => {
+const Grid: React.FC<Props> = ({ values }) => {
     const n = 9;
-    const [grid, setGrid] = useState(Array.from({length: n},()=> Array.from({length: n}, () => 0)));
+    const [grid, setGrid] = useState(values/*Array.from({length: n},()=> Array.from({length: n}, () => 0))*/);
     const eventBus: EventBus = EventBus.getInstance();
 
     eventBus.register('solveButtonClicked', () => {
-        setGrid([
-            [0,0,0,0,0,0,2,0,0],
-            [0,8,0,0,0,7,0,9,0],
-            [6,0,2,0,0,0,5,0,0],
-            [0,7,0,0,6,0,0,0,0],
-            [0,0,0,9,0,1,0,0,0],
-            [0,0,0,0,2,0,0,4,0],
-            [0,0,5,0,0,0,6,0,3],
-            [0,9,0,4,0,0,0,7,0],
-            [0,0,6,0,0,0,0,0,0],
-        ])
         solve();
+
+        console.log(grid);
+        console.log("VEGE");
     });
 
     const solve = (): boolean => {
         const emptyCell = findEmptyCell();
         const [row, col] = emptyCell;
-
         if (row !== -1) {
             for(let i = 1; i < 10; i++) {
-                console.log(isAllowed(row, col, i));
                 if(isAllowed(row, col, i)) {
                     let copy = [...grid];
                     copy[row][col] = i;
@@ -40,9 +33,9 @@ const Grid: React.FC = () => {
                         return true
                     }
                 
-                    copy = [...grid];
-                    copy[row][col] = 0;
-                    setGrid(copy);
+                    let copy2 = [...grid];
+                    copy2[row][col] = 0;
+                    setGrid(copy2);
                 }
             }
             return false;
@@ -62,7 +55,6 @@ const Grid: React.FC = () => {
     }
 
     const isAllowed = (rowIndex: number, colIndex: number, value: number) => {
-        console.log(isAllowedInCol(colIndex, value),isAllowedInRow(rowIndex, value),isAllowedInBox(rowIndex, colIndex, value))
         return isAllowedInCol(colIndex, value) && isAllowedInRow(rowIndex, value) && isAllowedInBox(rowIndex, colIndex, value)
     }
 
@@ -100,8 +92,6 @@ const Grid: React.FC = () => {
         let copy = [...grid];
         copy[row][column] = newValue;
         setGrid(copy);
-
-        console.log(grid);
     }
 
     return(
