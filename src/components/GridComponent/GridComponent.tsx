@@ -3,39 +3,32 @@ import React, { useState } from 'react';
 import './GridComponent.css';
 import { EventBus } from '../../lowlevel/EventBus';
 
-type Props = {
-    values: number[][]
-}
-
-const Grid: React.FC<Props> = ({ values }) => {
+const Grid: React.FC = () => {
     const n = 9;
-    const [grid, setGrid] = useState(values/*Array.from({length: n},()=> Array.from({length: n}, () => 0))*/);
+    const [grid, setGrid] = useState(Array.from({length: n},()=> Array.from({length: n}, () => 0)));
     const eventBus: EventBus = EventBus.getInstance();
 
     eventBus.register('solveButtonClicked', () => {
-        solve();
+        let copy = [...grid];
+        
+        solve(copy);
 
-        console.log(grid);
-        console.log("VEGE");
+        setGrid(copy);
     });
 
-    const solve = (): boolean => {
+    const solve = (copy: number[][]): boolean => {
         const emptyCell = findEmptyCell();
         const [row, col] = emptyCell;
         if (row !== -1) {
             for(let i = 1; i < 10; i++) {
                 if(isAllowed(row, col, i)) {
-                    let copy = [...grid];
                     copy[row][col] = i;
-                    setGrid(copy);
     
-                    if(solve()) {
+                    if(solve(copy)) {
                         return true
                     }
-                
-                    let copy2 = [...grid];
-                    copy2[row][col] = 0;
-                    setGrid(copy2);
+
+                    copy[row][col] = 0;
                 }
             }
             return false;
